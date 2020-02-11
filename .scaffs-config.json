@@ -1,0 +1,6 @@
+{
+  "scaffsPaths": ["tools/scaffs"],
+  "scaffs": {
+    "operator": "tools/scaffs/operator"
+  }
+}

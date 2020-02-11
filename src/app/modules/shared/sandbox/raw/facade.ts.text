@@ -1,0 +1,28 @@
+import { ReactiveXHub } from './bridge';
+import { Observable } from 'rxjs';
+import { Event, EventType } from './event';
+import { bridge } from './bridge';
+class Facade {
+  private static instance: Facade = null;
+
+  public static getInstance() {
+    return this.instance || (this.instance = new Facade());
+  }
+
+  public observe(id: number) {
+    window.top.postMessage({ header: EventType.Add, value: id }, '*');
+    return new Observable<string>(observer => {
+      bridge.onNext(id).subscribe(data => {
+        observer.next(data);
+      });
+      bridge.onComplete(id).subscribe(() => {
+        observer.complete();
+      });
+      bridge.onError(id).subscribe(err => {
+        observer.error(err);
+      });
+    });
+  }
+}
+
+export let facade = Facade.getInstance();

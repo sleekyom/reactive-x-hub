@@ -1,0 +1,15 @@
+export enum EventType {
+  Handshake = 'HANDSHAKE',
+  Add = 'ADD',
+  Next = 'NEXT',
+  Complete = 'COMPLETE',
+  Error = 'ERROR'
+}
+
+export interface Event extends MessageEvent {
+  data: {
+    value: any;
+    header: EventType;
+    id: number;
+  };
+}

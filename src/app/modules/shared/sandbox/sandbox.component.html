@@ -1,0 +1,91 @@
+<br />
+<div class="container-fluid">
+  <mat-card>
+    <mat-card-content>
+      <div *ngFor="let stream of subjects; let i = index" class="sanbox_stream">
+        <div>
+          <div>
+            <mat-form-field>
+              <input matInput value="hello worsld" #valve pattern="qwesdaqa" />
+            </mat-form-field>
+            <br />
+            <button
+              [disabled]="!isConnected || !stream.isActive"
+              mat-mini-fab
+              color="primary"
+              title="Next"
+              (click)="onClick(HubEvents.Next, i, valve.value)"
+            >
+              <mat-icon>play_circle_filled</mat-icon>
+            </button>
+            <button
+              [disabled]="!isConnected || !stream.isActive"
+              mat-mini-fab
+              color="accent"
+              title="Complete"
+              (click)="onClick(HubEvents.Complete, i)"
+            >
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button
+              [disabled]="!isConnected || !stream.isActive"
+              mat-mini-fab
+              color="warn"
+              title="Error"
+              (click)="onClick(HubEvents.Next, i, valve.value)"
+            >
+              <mat-icon>error</mat-icon>
+            </button>
+          </div>
+          <div class="">
+            <button
+              mat-icon-button
+              class="stream-event"
+              *ngFor="let event of stream.history; let j = index"
+              [title]="event.value ? event.value : ''"
+            >
+              <ng-container [ngSwitch]="event.type">
+                <mat-icon *ngSwitchCase="'NEXT'" color="primary"
+                  >play_circle_filled</mat-icon
+                >
+                <mat-icon *ngSwitchCase="'COMPLETE'" color="accent"
+                  >check_circle</mat-icon
+                >
+                <mat-icon *ngSwitchCase="'ERROR'" color="warn">error</mat-icon>
+              </ng-container>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-divider></mat-divider>
+    <mat-card-footer>
+      <ng-container *ngIf="subscription.history.length === 0">
+        <br />
+        <br />
+      </ng-container>
+      <button
+        mat-icon-button
+        class="stream-event"
+        *ngFor="let event of subscription.history; let j = index"
+        [title]="event.value ? event.value : ''"
+      >
+        <ng-container [ngSwitch]="event.type">
+          <mat-icon *ngSwitchCase="'NEXT'" color="primary"
+            >play_circle_filled</mat-icon
+          >
+          <mat-icon *ngSwitchCase="'COMPLETE'" color="accent"
+            >check_circle</mat-icon
+          >
+          <mat-icon *ngSwitchCase="'ERROR'" color="warn">error</mat-icon>
+        </ng-container>
+      </button>
+    </mat-card-footer>
+  </mat-card>
+
+  <mat-progress-bar
+    [mode]="isConnected ? 'determined' : 'indeterminate'"
+    value="100"
+  ></mat-progress-bar>
+  <div #iframe></div>
+</div>

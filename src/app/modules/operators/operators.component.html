@@ -1,0 +1,31 @@
+<mat-sidenav-container>
+  <mat-sidenav #drawer mode="side" opened="true" *ngFor="let route of routes">
+    <!-- <mat-toolbar><mat-icon>menu</mat-icon></mat-toolbar> -->
+
+    <mat-nav-list *ngFor="let category of route.children" class="category">
+      <a
+        mat-list-item
+        [routerLink]="category.path"
+        routerLinkActive="active-category"
+        >{{ category?.data?.name || (category.path | titlecase) }}</a
+      >
+
+      <ng-container *ngFor="let operator of category.children">
+        <mat-nav-list
+          dense
+          *ngIf="operator.path.length && !operator.redirectTo"
+        >
+          <a
+            mat-list-item
+            [routerLink]="category.path + '/' + operator.path"
+            routerLinkActive="active-operator"
+            >{{ operator?.data?.name || (operator.path | camelize) }}</a
+          >
+        </mat-nav-list>
+      </ng-container>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <main><router-outlet></router-outlet></main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

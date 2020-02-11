@@ -1,0 +1,7 @@
+import { map } from 'rxjs/operators';
+import { facade } from './facade';
+import { observer } from './helpers';
+
+const source$ = facade.observe(0);
+
+source$.pipe(map(item => item + 1)).subscribe(observer);

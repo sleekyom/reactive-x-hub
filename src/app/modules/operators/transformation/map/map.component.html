@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Map</mat-card-title>
+      <mat-card-subtitle>
+        <code lang="typescript"
+          >map &lt;T, R &gt;(<var>project</var>: (<var>value</var>: T,
+          <var>index</var>: number) => R, thisArg?: any): OperatorFunction&lt;T,
+          R&gt;</code
+        >
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>
+        Applies a given project function to each value emitted by the source
+        Observable, and emits the resulting values as an Observable
+      </p>
+    </mat-card-content>
+    <mat-card-actions> </mat-card-actions>
+    <mat-divider></mat-divider>
+    <mat-card-footer></mat-card-footer>
+  </mat-card>
+</div>
+<app-sandbox [project]="project"></app-sandbox>

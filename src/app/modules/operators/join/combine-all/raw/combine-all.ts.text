@@ -1,0 +1,19 @@
+import { combineAll, map, take } from 'rxjs/operators';
+import { facade } from './facade';
+import { handleOperator, observer } from './helpers';
+
+const source$ = facade.observe(0);
+const source2$ = facade.observe(1);
+
+source$
+  .pipe(
+    map(item =>
+      source2$.pipe(
+        take(3),
+        handleOperator()
+      )
+    ),
+    take(2)
+  )
+  .pipe(combineAll())
+  .subscribe(observer);

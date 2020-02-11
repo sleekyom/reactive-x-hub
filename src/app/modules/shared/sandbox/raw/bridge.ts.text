@@ -1,0 +1,67 @@
+import { fromEvent, Observable, merge } from 'rxjs';
+import { filter, takeUntil, map, mergeMap, mapTo, tap } from 'rxjs/operators';
+import { Event, EventType } from './event';
+import { shit } from './hit';
+
+export class Bridge {
+  private static instance: Bridge = null;
+  private constructor() {
+    window.top.postMessage({ header: EventType.Handshake }, '*');
+  }
+
+  public static getInstance() {
+    return this.instance || (this.instance = new Bridge());
+  }
+
+  private filterEvent(event: Event, type, id) {
+    return event.data && event.data.header === type && event.data.id === id;
+  }
+
+  private mapEvent(event: Event) {
+    return event.data ? event.data.value : null;
+  }
+  public append(id: number, eventType: EventType, data = null) {
+    const ul = document.getElementById('list');
+    const li = document.createElement('li');
+    let text = '';
+    switch (eventType) {
+      case EventType.Next:
+        text = `${id} <<< NEXT <<< ${data}`;
+        break;
+      case EventType.Error:
+        text = `${id} <<< ERROR <<< ${data}`;
+        break;
+      case EventType.Complete:
+        text = `${id} <<< COMPLETED`;
+        break;
+    }
+    li.appendChild(document.createTextNode(JSON.stringify(text)));
+    ul.appendChild(li);
+  }
+
+  public onNext(id: number) {
+    return fromEvent(window, 'message').pipe(
+      filter((event: Event) => this.filterEvent(event, EventType.Next, id)),
+      map(this.mapEvent),
+      tap(data => this.append(id, EventType.Next, data))
+    );
+  }
+
+  public onComplete(id: number) {
+    return fromEvent(window, 'message').pipe(
+      filter((event: Event) => this.filterEvent(event, EventType.Complete, id)),
+      map(this.mapEvent),
+      tap(() => this.append(id, EventType.Complete))
+    );
+  }
+
+  public onError(id: number) {
+    return fromEvent(window, 'message').pipe(
+      filter((event: Event) => this.filterEvent(event, EventType.Error, id)),
+      map(this.mapEvent),
+      tap(err => this.append(id, EventType.Error, err))
+    );
+  }
+}
+
+export let bridge = Bridge.getInstance();

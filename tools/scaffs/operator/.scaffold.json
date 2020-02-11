@@ -1,0 +1,9 @@
+{
+  "variables": [
+    {
+      "prompt": "Name:string -> Foo Bar",
+      "name": "name",
+      "optional": false
+    }
+  ]
+}

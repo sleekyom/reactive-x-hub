@@ -1,0 +1,22 @@
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { bridge } from './bridge';
+import { EventType } from './event';
+export const observer = {
+  next: data => {
+    window.top.postMessage({ header: EventType.Next, value: data }, '*');
+    bridge.append(`${data}`);
+  },
+  error: (err = 'error') => {
+    window.top.postMessage({ header: EventType.Error, value: err }, '*');
+    bridge.append(err);
+  },
+  complete: () => {
+    window.top.postMessage({ header: EventType.Complete }, '*');
+    bridge.append('complete');
+  }
+};
+
+export const handleOperator = () => <T>(source: Observable<T>) => {
+  return source.pipe(tap(observer));
+};

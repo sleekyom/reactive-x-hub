@@ -1,0 +1,12 @@
+import { zip } from 'rxjs/operators';
+import { facade } from './facade';
+import { observer } from './helpers';
+
+const source$ = facade.observe(0);
+const source2$ = facade.observe(1);
+
+source$
+  .pipe(zip(source2$))
+  .subscribe(observer)
+
+  .subscribe(observer);
